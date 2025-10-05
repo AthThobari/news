@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getStory } from "../services/hnApi";
-import { StoryType } from "../utils/SelectField";
+import { StoryType } from "../selectors/SelectField";
 import {
   StoryMeta,
   StoryMetaElement,
   StoryTitle,
   StoryWrapper,
 } from "../style/StoryStyles";
+import { mapTime } from "../mappers/mapTIme";
 
-function Story({ storyId }: { storyId: number }) {
+function Story({ storyId }: { storyId: number}) {
   const [story, setStory] = useState<StoryType | null>(null);
   useEffect(() => {
     getStory(storyId).then((data) => data && data.url && setStory(data));
@@ -16,7 +17,7 @@ function Story({ storyId }: { storyId: number }) {
   return story && story.url ? (
     <StoryWrapper data-testid="story">
       <StoryTitle>
-        <a href={story.url}>{story.title}</a>
+        <a target="_blank" href={story.url}>{story.title}</a>
       </StoryTitle>
 
       <StoryMeta>
@@ -24,7 +25,8 @@ function Story({ storyId }: { storyId: number }) {
           <StoryMetaElement color="#000">By:</StoryMetaElement> {story.by}
         </span>
         <span className="story__time" data-testid="story-time">
-          <StoryMetaElement color="#000">Posted:</StoryMetaElement> {story.time}
+          <StoryMetaElement color="#000">Posted:</StoryMetaElement>{" "}
+          {mapTime(story.time ?? 0)}
         </span>
       </StoryMeta>
     </StoryWrapper>
