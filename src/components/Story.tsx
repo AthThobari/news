@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { getStory } from "../services/hnApi";
 import { StoryType } from "../selectors/SelectField";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../style/StoryStyles";
 import { mapTime } from "../mappers/mapTIme";
 
-function Story({ storyId }: { storyId: number}) {
+const StoryComponent = ({ storyId }: { storyId: number}) => {
   const [story, setStory] = useState<StoryType | null>(null);
   useEffect(() => {
     getStory(storyId).then((data) => data && data.url && setStory(data));
@@ -32,5 +32,7 @@ function Story({ storyId }: { storyId: number}) {
     </StoryWrapper>
   ) : null;
 }
+
+const Story = memo(StoryComponent)
 
 export default Story;
